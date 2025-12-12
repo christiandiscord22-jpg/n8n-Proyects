@@ -1,0 +1,339 @@
+{
+  "name": "Lead Capture - Google Forms",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "documentId": {
+          "__rl": true,
+          "value": "1pKT_4kBcHaPe7HvV8BVae9ABRZ7JCgaznRjKUswVSJ0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "id",
+          "value": "479929779"
+        },
+        "event": "rowAdded",
+        "options": {}
+      },
+      "id": "946450b2-f5e0-4ee9-b294-48f6c183f6ad",
+      "name": "Google Forms - Trigger",
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        -880,
+        128
+      ],
+      "credentials": {
+        "googleSheetsTriggerOAuth2Api": {
+          "id": "s5TpLi70ILdf7Fqx",
+          "name": "Google Sheets Trigger account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "// Obtener los datos de entrada\nconst inputData = $input.item.json;\n\n// Mostrar en consola para debug\nconsole.log('Datos recibidos:', JSON.stringify(inputData, null, 2));\n\n// Extraer timestamp\nconst marcaTemporal = inputData['Marca temporal'] || new Date().toISOString();\nconst fecha = new Date(marcaTemporal);\nconst timestamp = fecha.toLocaleString('es-EC', {\n  year: 'numeric',\n  month: '2-digit',\n  day: '2-digit',\n  hour: '2-digit',\n  minute: '2-digit',\n  second: '2-digit',\n  hour12: false\n});\n\n// Extraer campos - probando múltiples variaciones de nombres\nconst nombre = inputData['Nombre completo'] || \n               inputData['Nombre'] || \n               'Sin nombre';\n\nconst email = inputData['Correo electrónico'] || \n              inputData['Email'] || \n              inputData['Correo'] ||\n              'Sin email';\n\nconst telefono = inputData['Número de teléfono'] || \n                 inputData['Teléfono'] || \n                 inputData['Telefono'] ||\n                 'Sin teléfono';\n\nconst canalConocimiento = inputData['¿Cómo conociste nuestros servicios?'] || \n                          inputData['Como conociste nuestros servicios'] ||\n                          'No especificado';\n\nconst serviciosInteres = inputData['¿Qué servicio te interesa?'] || \n                        inputData['Que servicio te interesa'] ||\n                        'No especificado';\n\nconst presupuesto = inputData['Presupuesto aproximado (USD)'] || \n                   inputData['Presupuesto aproximado'] ||\n                   inputData['Presupuesto'] ||\n                   'No especificado';\n\nconst mensaje = inputData['Cuéntanos sobre tu proyecto o necesidad'] || \n               inputData['Cuentanos sobre tu proyecto o necesidad'] ||\n               inputData['Mensaje'] ||\n               'Sin mensaje';\n\n// Validaciones\nif (!email || email === 'Sin email') {\n  throw new Error('⚠️ Lead inválido: Email requerido');\n}\n\nconst emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\nif (!emailRegex.test(email)) {\n  throw new Error('⚠️ Lead inválido: Formato de email incorrecto - ' + email);\n}\n\n// Lead Scoring\nlet prioridad = 'Media';\nlet puntaje = 0;\n\n// Puntos por presupuesto\nif (presupuesto.includes('$10,000') || presupuesto.includes('10.000')) puntaje += 5;\nelse if (presupuesto.includes('$5,000') || presupuesto.includes('5.000')) puntaje += 4;\nelse if (presupuesto.includes('$1,000') || presupuesto.includes('1.000')) puntaje += 3;\nelse if (presupuesto.includes('$500') || presupuesto.includes('500')) puntaje += 2;\nelse puntaje += 1;\n\n// Puntos por múltiples servicios\nif (serviciosInteres.includes(',') || serviciosInteres.includes(';')) puntaje += 2;\n\n// Puntos por mensaje detallado\nif (mensaje && mensaje.length > 50) puntaje += 2;\n\n// Determinar prioridad\nif (puntaje >= 7) prioridad = 'Alta';\nelse if (puntaje <= 3) prioridad = 'Baja';\n\n// Retornar datos normalizados\nreturn {\n  json: {\n    timestamp: timestamp,\n    nombre: nombre,\n    email: email,\n    telefono: telefono,\n    fuente: 'Google Forms',\n    canalConocimiento: canalConocimiento,\n    serviciosInteres: serviciosInteres,\n    presupuesto: presupuesto,\n    mensaje: mensaje,\n    estado: 'Nuevo',\n    prioridad: prioridad,\n    puntajeLeadScoring: puntaje,\n    fechaCaptura: fecha.toISOString(),\n    diaCaptura: fecha.toLocaleDateString('es-EC'),\n    horaCaptura: fecha.toLocaleTimeString('es-EC'),\n    mesCaptura: fecha.toLocaleDateString('es-EC', { month: 'long', year: 'numeric' })\n  }\n};"
+      },
+      "id": "7558501b-7c5b-4e0d-9aec-cd180eeb42a4",
+      "name": "Normalizar y Procesar",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -656,
+        128
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "17-hUs8NoPle5rtYHudmNBcUFi8Pw6_0LjiOQFko_J4s",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $json.timestamp }}",
+            "Nombre": "={{ $json.nombre }}",
+            "Email": "={{ $json.email }}",
+            "Teléfono": "={{ $json.telefono }}",
+            "Fuente": "={{ $json.fuente }}",
+            "Canal Conocimiento": "={{ $json.canalConocimiento }}",
+            "Servicios Interés": "={{ $json.serviciosInteres }}",
+            "Presupuesto": "={{ $json.presupuesto }}",
+            "Mensaje": "={{ $json.mensaje }}",
+            "Estado": "={{ $json.estado }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Nombre",
+              "displayName": "Nombre",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Teléfono",
+              "displayName": "Teléfono",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Fuente",
+              "displayName": "Fuente",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Canal Conocimiento",
+              "displayName": "Canal Conocimiento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Servicios Interés",
+              "displayName": "Servicios Interés",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Presupuesto",
+              "displayName": "Presupuesto",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Mensaje",
+              "displayName": "Mensaje",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Estado",
+              "displayName": "Estado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "a3e3b5e5-4afe-411d-8707-e92b8a4bb723",
+      "name": "Guardar en Base Central",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -448,
+        128
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "hJmJywDZzhCq0yyE",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "prioridad-alta",
+              "leftValue": "={{ $json.prioridad }}",
+              "rightValue": "Alta",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "f2afac05-0fbb-45ae-b122-4c2c9e9cabc0",
+      "name": "¿Prioridad Alta?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -224,
+        128
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "christian88afu@gmail.com",
+        "subject": "=🔥 LEAD URGENTE: {{ $json.nombre }} - Presupuesto {{ $json.presupuesto }}",
+        "message": "=<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"UTF-8\">\n</head>\n<body style=\"margin: 0; padding: 0; font-family: Arial, sans-serif;\">\n  <div style=\"max-width: 600px; margin: 0 auto; background: #ffffff;\">\n    <div style=\"background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); padding: 30px; text-align: center;\">\n      <h1 style=\"color: white; margin: 0; font-size: 32px; font-weight: 700;\">🔥 LEAD DE ALTA PRIORIDAD</h1>\n      <p style=\"color: #fecaca; margin: 10px 0 0 0; font-size: 16px;\">¡Requiere atención inmediata!</p>\n    </div>\n    <div style=\"background: #fef2f2; border-left: 4px solid #dc2626; padding: 20px;\">\n      <p style=\"margin: 0; color: #991b1b; font-weight: 600;\">⚠️ LEAD SCORING: {{ $json.puntajeLeadScoring }}/10 - PRIORIDAD ALTA</p>\n    </div>\n    <div style=\"padding: 30px;\">\n      <div style=\"background: #f9fafb; padding: 25px; border-radius: 12px; margin-bottom: 20px;\">\n        <h2 style=\"color: #1f2937; margin: 0 0 20px 0; font-size: 20px; border-bottom: 2px solid #dc2626; padding-bottom: 12px;\">📊 Datos del Lead</h2>\n        <table style=\"width: 100%;\">\n          <tr>\n            <td style=\"padding: 12px 0; color: #6b7280; font-weight: 600;\">👤 Nombre:</td>\n            <td style=\"padding: 12px 0; color: #1f2937; font-weight: 600;\">{{ $json.nombre }}</td>\n          </tr>\n          <tr>\n            <td style=\"padding: 12px 0; color: #6b7280; font-weight: 600;\">📧 Email:</td>\n            <td style=\"padding: 12px 0;\"><a href=\"mailto:{{ $json.email }}\" style=\"color: #dc2626;\">{{ $json.email }}</a></td>\n          </tr>\n          <tr>\n            <td style=\"padding: 12px 0; color: #6b7280; font-weight: 600;\">📱 Teléfono:</td>\n            <td style=\"padding: 12px 0;\"><a href=\"tel:{{ $json.telefono }}\" style=\"color: #dc2626;\">{{ $json.telefono }}</a></td>\n          </tr>\n          <tr>\n            <td style=\"padding: 12px 0; color: #6b7280; font-weight: 600;\">💰 Presupuesto:</td>\n            <td style=\"padding: 12px 0;\"><span style=\"background: #dcfce7; color: #166534; padding: 6px 12px; border-radius: 6px; font-weight: 600;\">{{ $json.presupuesto }}</span></td>\n          </tr>\n          <tr>\n            <td style=\"padding: 12px 0; color: #6b7280; font-weight: 600;\">🎯 Servicios:</td>\n            <td style=\"padding: 12px 0; color: #1f2937;\">{{ $json.serviciosInteres }}</td>\n          </tr>\n          <tr>\n            <td style=\"padding: 12px 0; color: #6b7280; font-weight: 600;\">📢 Nos conoció:</td>\n            <td style=\"padding: 12px 0; color: #1f2937;\">{{ $json.canalConocimiento }}</td>\n          </tr>\n          <tr>\n            <td style=\"padding: 12px 0; color: #6b7280; font-weight: 600;\">🕐 Fecha:</td>\n            <td style=\"padding: 12px 0; color: #1f2937;\">{{ $json.timestamp }}</td>\n          </tr>\n        </table>\n      </div>\n      <div style=\"background: #fffbeb; border-left: 4px solid #f59e0b; padding: 20px; border-radius: 4px; margin-bottom: 25px;\">\n        <h3 style=\"color: #92400e; margin: 0 0 12px 0; font-size: 16px;\">💬 Mensaje del Lead</h3>\n        <p style=\"color: #78350f; margin: 0;\">{{ $json.mensaje }}</p>\n      </div>\n      <div style=\"text-align: center; margin: 35px 0;\">\n        <a href=\"mailto:{{ $json.email }}\" style=\"display: inline-block; background: #dc2626; color: white; padding: 18px 40px; text-decoration: none; border-radius: 8px; font-weight: 700;\">📧 Contactar Ahora</a>\n      </div>\n    </div>\n    <div style=\"background: #f9fafb; padding: 20px; text-align: center;\">\n      <p style=\"color: #6b7280; font-size: 12px; margin: 0;\">🤖 Automatizado con n8n</p>\n    </div>\n  </div>\n</body>\n</html>",
+        "options": {}
+      },
+      "id": "65bfa0b7-388d-4ddb-824a-fd7c530164d0",
+      "name": "Email URGENTE",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "9fe99722-d8ea-41cc-8738-919517d9a02f",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "mnX66wWOpLhVn3c3",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "christian88afu@gmail.com",
+        "subject": "=📬 Nuevo Lead: {{ $json.nombre }} desde Google Forms",
+        "message": "=<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"UTF-8\">\n</head>\n<body style=\"margin: 0; padding: 0; font-family: Arial, sans-serif;\">\n  <div style=\"max-width: 600px; margin: 0 auto; background: #ffffff;\">\n    <div style=\"background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); padding: 30px; text-align: center;\">\n      <h1 style=\"color: white; margin: 0; font-size: 28px;\">📬 Nuevo Lead Recibido</h1>\n      <p style=\"color: #bfdbfe; margin: 10px 0 0 0;\">Google Forms - Encuesta de Contacto</p>\n    </div>\n    <div style=\"padding: 30px;\">\n      <div style=\"background: #f9fafb; padding: 20px; border-radius: 10px; margin-bottom: 20px;\">\n        <h2 style=\"color: #1f2937; margin: 0 0 15px 0; font-size: 18px; border-bottom: 2px solid #2563eb; padding-bottom: 10px;\">📊 Información del Lead</h2>\n        <table style=\"width: 100%;\">\n          <tr>\n            <td style=\"padding: 10px 0; color: #6b7280; font-weight: 600;\">👤 Nombre:</td>\n            <td style=\"padding: 10px 0; color: #1f2937;\">{{ $json.nombre }}</td>\n          </tr>\n          <tr>\n            <td style=\"padding: 10px 0; color: #6b7280; font-weight: 600;\">📧 Email:</td>\n            <td style=\"padding: 10px 0;\"><a href=\"mailto:{{ $json.email }}\" style=\"color: #2563eb;\">{{ $json.email }}</a></td>\n          </tr>\n          <tr>\n            <td style=\"padding: 10px 0; color: #6b7280; font-weight: 600;\">📱 Teléfono:</td>\n            <td style=\"padding: 10px 0;\"><a href=\"tel:{{ $json.telefono }}\" style=\"color: #2563eb;\">{{ $json.telefono }}</a></td>\n          </tr>\n          <tr>\n            <td style=\"padding: 10px 0; color: #6b7280; font-weight: 600;\">💰 Presupuesto:</td>\n            <td style=\"padding: 10px 0; color: #1f2937;\">{{ $json.presupuesto }}</td>\n          </tr>\n          <tr>\n            <td style=\"padding: 10px 0; color: #6b7280; font-weight: 600;\">🎯 Servicios:</td>\n            <td style=\"padding: 10px 0; color: #1f2937;\">{{ $json.serviciosInteres }}</td>\n          </tr>\n          <tr>\n            <td style=\"padding: 10px 0; color: #6b7280; font-weight: 600;\">📢 Nos conoció:</td>\n            <td style=\"padding: 10px 0; color: #1f2937;\">{{ $json.canalConocimiento }}</td>\n          </tr>\n        </table>\n      </div>\n      <div style=\"background: #fef3c7; padding: 15px; border-left: 4px solid #f59e0b; border-radius: 4px; margin-bottom: 20px;\">\n        <h3 style=\"color: #92400e; margin: 0 0 10px 0; font-size: 16px;\">💬 Mensaje</h3>\n        <p style=\"color: #78350f; margin: 0;\">{{ $json.mensaje }}</p>\n      </div>\n      <div style=\"text-align: center; margin: 25px 0;\">\n        <a href=\"mailto:{{ $json.email }}\" style=\"background: #2563eb; color: white; padding: 14px 30px; text-decoration: none; border-radius: 6px; font-weight: 600;\">📧 Contactar Lead</a>\n      </div>\n    </div>\n    <div style=\"background: #f9fafb; padding: 20px; text-align: center;\">\n      <p style=\"color: #6b7280; font-size: 12px; margin: 0;\">🤖 Automatizado con n8n</p>\n    </div>\n  </div>\n</body>\n</html>",
+        "options": {}
+      },
+      "id": "45e409dc-d51d-49be-91e7-2609714fbb47",
+      "name": "Email Normal",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        240
+      ],
+      "webhookId": "68d891ae-f766-42f6-945c-8a46a3f36ca7",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "mnX66wWOpLhVn3c3",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Forms - Trigger": {
+      "main": [
+        [
+          {
+            "node": "Normalizar y Procesar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalizar y Procesar": {
+      "main": [
+        [
+          {
+            "node": "Guardar en Base Central",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Guardar en Base Central": {
+      "main": [
+        [
+          {
+            "node": "¿Prioridad Alta?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Prioridad Alta?": {
+      "main": [
+        [
+          {
+            "node": "Email URGENTE",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Email Normal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "af4efb9a-114f-4185-9132-ff9adb98b0ce",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "32ff05446ac5c0f6c6bffb13625af533df203e6bd88a3dc53fef3ace608bece4"
+  },
+  "id": "7JmsWd5Sbt6efw4T",
+  "tags": []
+}

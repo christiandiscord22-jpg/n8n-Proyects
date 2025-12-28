@@ -1,0 +1,112 @@
+{
+  "name": "PDF Contract Analyst",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "pdf-contract-analyst-1",
+      "name": "Google Drive file trigger",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "pdf-contract-analyst-2",
+      "name": "Binary parser and OCR cleanup",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        240,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "pdf-contract-analyst-3",
+      "name": "OpenAI GPT-4 clause analysis",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        480,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "pdf-contract-analyst-4",
+      "name": "Google Sheets summary record",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 1,
+      "position": [
+        720,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "pdf-contract-analyst-5",
+      "name": "Slack notification with risk snapshot",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [
+        960,
+        200
+      ]
+    }
+  ],
+  "connections": {
+    "Google Drive file trigger": {
+      "main": [
+        [
+          {
+            "node": "Binary parser and OCR cleanup",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Binary parser and OCR cleanup": {
+      "main": [
+        [
+          {
+            "node": "OpenAI GPT-4 clause analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI GPT-4 clause analysis": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets summary record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets summary record": {
+      "main": [
+        [
+          {
+            "node": "Slack notification with risk snapshot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "meta": {
+    "generated": true,
+    "source": "automation-portfolio"
+  },
+  "active": false
+}

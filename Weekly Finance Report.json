@@ -1,0 +1,112 @@
+{
+  "name": "Weekly Finance Report",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "weekly-finance-report-1",
+      "name": "Friday schedule trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "weekly-finance-report-2",
+      "name": "Stripe API data pull",
+      "type": "n8n-nodes-base.stripe",
+      "typeVersion": 1,
+      "position": [
+        240,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "weekly-finance-report-3",
+      "name": "Code Node aggregation + GPT summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        480,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "weekly-finance-report-4",
+      "name": "Google Sheets update",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 1,
+      "position": [
+        720,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "weekly-finance-report-5",
+      "name": "Slack digest send + Drive archive",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [
+        960,
+        200
+      ]
+    }
+  ],
+  "connections": {
+    "Friday schedule trigger": {
+      "main": [
+        [
+          {
+            "node": "Stripe API data pull",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Stripe API data pull": {
+      "main": [
+        [
+          {
+            "node": "Code Node aggregation + GPT summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Node aggregation + GPT summary": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets update": {
+      "main": [
+        [
+          {
+            "node": "Slack digest send + Drive archive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "meta": {
+    "generated": true,
+    "source": "automation-portfolio"
+  },
+  "active": false
+}

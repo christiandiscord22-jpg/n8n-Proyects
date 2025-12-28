@@ -1,0 +1,112 @@
+{
+  "name": "Voice Notes to Action Items",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "voice-notes-to-action-items-1",
+      "name": "Telegram Webhook (voice note intake)",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "voice-notes-to-action-items-2",
+      "name": "Binary to base64 conversion",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        240,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "voice-notes-to-action-items-3",
+      "name": "OpenAI Whisper transcription",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        480,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "voice-notes-to-action-items-4",
+      "name": "GPT-4 summerization and priority scoring",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        720,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "voice-notes-to-action-items-5",
+      "name": "Notion task creation and Slack alert",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [
+        960,
+        200
+      ]
+    }
+  ],
+  "connections": {
+    "Telegram Webhook (voice note intake)": {
+      "main": [
+        [
+          {
+            "node": "Binary to base64 conversion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Binary to base64 conversion": {
+      "main": [
+        [
+          {
+            "node": "OpenAI Whisper transcription",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Whisper transcription": {
+      "main": [
+        [
+          {
+            "node": "GPT-4 summerization and priority scoring",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GPT-4 summerization and priority scoring": {
+      "main": [
+        [
+          {
+            "node": "Notion task creation and Slack alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "meta": {
+    "generated": true,
+    "source": "automation-portfolio"
+  },
+  "active": false
+}

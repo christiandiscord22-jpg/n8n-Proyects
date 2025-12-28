@@ -1,0 +1,112 @@
+{
+  "name": "Competitor Web Change Monitor",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "competitor-web-change-monitor-1",
+      "name": "Schedule trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "competitor-web-change-monitor-2",
+      "name": "HTTP Request fetch per URL",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        240,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "competitor-web-change-monitor-3",
+      "name": "Code Node diff and delta summary",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        480,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "competitor-web-change-monitor-4",
+      "name": "Slack alert + Notion archive",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [
+        720,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "competitor-web-change-monitor-5",
+      "name": "Data Store update for next run",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        960,
+        200
+      ]
+    }
+  ],
+  "connections": {
+    "Schedule trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request fetch per URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request fetch per URL": {
+      "main": [
+        [
+          {
+            "node": "Code Node diff and delta summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Node diff and delta summary": {
+      "main": [
+        [
+          {
+            "node": "Slack alert + Notion archive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack alert + Notion archive": {
+      "main": [
+        [
+          {
+            "node": "Data Store update for next run",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "meta": {
+    "generated": true,
+    "source": "automation-portfolio"
+  },
+  "active": false
+}

@@ -1,0 +1,112 @@
+{
+  "name": "Webinar Orchestration",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "webinar-orchestration-1",
+      "name": "Google Forms submission trigger",
+      "type": "n8n-nodes-base.googleFormsTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "webinar-orchestration-2",
+      "name": "Google Sheets normalization",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 1,
+      "position": [
+        240,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "webinar-orchestration-3",
+      "name": "Google Calendar event creation",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1,
+      "position": [
+        480,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "webinar-orchestration-4",
+      "name": "Wait Node + Gmail reminder",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 1,
+      "position": [
+        720,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "webinar-orchestration-5",
+      "name": "Attendance logging and Slack follow-up",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [
+        960,
+        200
+      ]
+    }
+  ],
+  "connections": {
+    "Google Forms submission trigger": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets normalization",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets normalization": {
+      "main": [
+        [
+          {
+            "node": "Google Calendar event creation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Calendar event creation": {
+      "main": [
+        [
+          {
+            "node": "Wait Node + Gmail reminder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait Node + Gmail reminder": {
+      "main": [
+        [
+          {
+            "node": "Attendance logging and Slack follow-up",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "meta": {
+    "generated": true,
+    "source": "automation-portfolio"
+  },
+  "active": false
+}

@@ -1,0 +1,112 @@
+{
+  "name": "AI Invoice Reader",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "ai-invoice-reader-1",
+      "name": "Gmail labeled email trigger",
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "ai-invoice-reader-2",
+      "name": "Binary fetch and metadata capture",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        240,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "ai-invoice-reader-3",
+      "name": "OpenAI Vision field extraction",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        480,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "ai-invoice-reader-4",
+      "name": "Code Node normalization",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        720,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "ai-invoice-reader-5",
+      "name": "Google Sheets append + Slack alert",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 1,
+      "position": [
+        960,
+        200
+      ]
+    }
+  ],
+  "connections": {
+    "Gmail labeled email trigger": {
+      "main": [
+        [
+          {
+            "node": "Binary fetch and metadata capture",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Binary fetch and metadata capture": {
+      "main": [
+        [
+          {
+            "node": "OpenAI Vision field extraction",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Vision field extraction": {
+      "main": [
+        [
+          {
+            "node": "Code Node normalization",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Node normalization": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets append + Slack alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "meta": {
+    "generated": true,
+    "source": "automation-portfolio"
+  },
+  "active": false
+}

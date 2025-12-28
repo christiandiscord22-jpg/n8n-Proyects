@@ -1,0 +1,112 @@
+{
+  "name": "Failed Payment Recovery",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "failed-payment-recovery-1",
+      "name": "Stripe webhook trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "failed-payment-recovery-2",
+      "name": "Code Node enrichment + Data Store dedupe",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        240,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "failed-payment-recovery-3",
+      "name": "Gmail recovery email send",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 1,
+      "position": [
+        480,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "failed-payment-recovery-4",
+      "name": "Slack notification and task creation",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [
+        720,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "failed-payment-recovery-5",
+      "name": "Google Sheets tracking update",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 1,
+      "position": [
+        960,
+        200
+      ]
+    }
+  ],
+  "connections": {
+    "Stripe webhook trigger": {
+      "main": [
+        [
+          {
+            "node": "Code Node enrichment + Data Store dedupe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Node enrichment + Data Store dedupe": {
+      "main": [
+        [
+          {
+            "node": "Gmail recovery email send",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail recovery email send": {
+      "main": [
+        [
+          {
+            "node": "Slack notification and task creation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack notification and task creation": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets tracking update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "meta": {
+    "generated": true,
+    "source": "automation-portfolio"
+  },
+  "active": false
+}

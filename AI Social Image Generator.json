@@ -1,0 +1,112 @@
+{
+  "name": "AI Social Image Generator",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "ai-social-image-generator-1",
+      "name": "RSS headline intake",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "ai-social-image-generator-2",
+      "name": "GPT-4 creative brief and prompt",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        240,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "ai-social-image-generator-3",
+      "name": "DALL-E 3 image generation",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        480,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "ai-social-image-generator-4",
+      "name": "Moderation + storage in S3/Drive",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        720,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "ai-social-image-generator-5",
+      "name": "Telegram notification for review",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [
+        960,
+        200
+      ]
+    }
+  ],
+  "connections": {
+    "RSS headline intake": {
+      "main": [
+        [
+          {
+            "node": "GPT-4 creative brief and prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GPT-4 creative brief and prompt": {
+      "main": [
+        [
+          {
+            "node": "DALL-E 3 image generation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DALL-E 3 image generation": {
+      "main": [
+        [
+          {
+            "node": "Moderation + storage in S3/Drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Moderation + storage in S3/Drive": {
+      "main": [
+        [
+          {
+            "node": "Telegram notification for review",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "meta": {
+    "generated": true,
+    "source": "automation-portfolio"
+  },
+  "active": false
+}

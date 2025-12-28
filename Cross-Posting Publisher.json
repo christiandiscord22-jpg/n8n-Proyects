@@ -1,0 +1,112 @@
+{
+  "name": "Cross-Posting Publisher",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "cross-posting-publisher-1",
+      "name": "CMS webhook intake",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "cross-posting-publisher-2",
+      "name": "GPT-4 tone and format adaptation",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        240,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "cross-posting-publisher-3",
+      "name": "Link enrichment + compliance checks",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        480,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "cross-posting-publisher-4",
+      "name": "LinkedIn API publish",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        720,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "cross-posting-publisher-5",
+      "name": "Discord/social notification with Airtable log",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 1,
+      "position": [
+        960,
+        200
+      ]
+    }
+  ],
+  "connections": {
+    "CMS webhook intake": {
+      "main": [
+        [
+          {
+            "node": "GPT-4 tone and format adaptation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GPT-4 tone and format adaptation": {
+      "main": [
+        [
+          {
+            "node": "Link enrichment + compliance checks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Link enrichment + compliance checks": {
+      "main": [
+        [
+          {
+            "node": "LinkedIn API publish",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LinkedIn API publish": {
+      "main": [
+        [
+          {
+            "node": "Discord/social notification with Airtable log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "meta": {
+    "generated": true,
+    "source": "automation-portfolio"
+  },
+  "active": false
+}

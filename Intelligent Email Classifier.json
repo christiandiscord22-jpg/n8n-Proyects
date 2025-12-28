@@ -1,0 +1,112 @@
+{
+  "name": "Intelligent Email Classifier",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "intelligent-email-classifier-1",
+      "name": "Gmail new message trigger",
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "intelligent-email-classifier-2",
+      "name": "Code Node cleans body",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        240,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "intelligent-email-classifier-3",
+      "name": "GPT-4 intent classifier",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        480,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "intelligent-email-classifier-4",
+      "name": "Conditional routing to Gmail, Slack, or escalation queue",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 1,
+      "position": [
+        720,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "intelligent-email-classifier-5",
+      "name": "Google Sheets logging with Data Store dedupe",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 1,
+      "position": [
+        960,
+        200
+      ]
+    }
+  ],
+  "connections": {
+    "Gmail new message trigger": {
+      "main": [
+        [
+          {
+            "node": "Code Node cleans body",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Node cleans body": {
+      "main": [
+        [
+          {
+            "node": "GPT-4 intent classifier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GPT-4 intent classifier": {
+      "main": [
+        [
+          {
+            "node": "Conditional routing to Gmail, Slack, or escalation queue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Conditional routing to Gmail, Slack, or escalation queue": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets logging with Data Store dedupe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "meta": {
+    "generated": true,
+    "source": "automation-portfolio"
+  },
+  "active": false
+}

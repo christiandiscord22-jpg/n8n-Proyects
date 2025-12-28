@@ -1,0 +1,112 @@
+{
+  "name": "Giveaway Winner Selector",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "giveaway-winner-selector-1",
+      "name": "Google Sheets participant trigger",
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "giveaway-winner-selector-2",
+      "name": "Code Node seeded random selection",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        240,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "giveaway-winner-selector-3",
+      "name": "PDF certificate assembly",
+      "type": "n8n-nodes-base.pdf",
+      "typeVersion": 1,
+      "position": [
+        480,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "giveaway-winner-selector-4",
+      "name": "Gmail notification and Slack proof",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 1,
+      "position": [
+        720,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "giveaway-winner-selector-5",
+      "name": "Airtable log with hash source",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 1,
+      "position": [
+        960,
+        200
+      ]
+    }
+  ],
+  "connections": {
+    "Google Sheets participant trigger": {
+      "main": [
+        [
+          {
+            "node": "Code Node seeded random selection",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Node seeded random selection": {
+      "main": [
+        [
+          {
+            "node": "PDF certificate assembly",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PDF certificate assembly": {
+      "main": [
+        [
+          {
+            "node": "Gmail notification and Slack proof",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail notification and Slack proof": {
+      "main": [
+        [
+          {
+            "node": "Airtable log with hash source",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "meta": {
+    "generated": true,
+    "source": "automation-portfolio"
+  },
+  "active": false
+}

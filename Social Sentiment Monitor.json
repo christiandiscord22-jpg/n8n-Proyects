@@ -1,0 +1,112 @@
+{
+  "name": "Social Sentiment Monitor",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "social-sentiment-monitor-1",
+      "name": "Schedule or RSS trigger",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "social-sentiment-monitor-2",
+      "name": "HTTP/RSS fetch and dedupe",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [
+        240,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "social-sentiment-monitor-3",
+      "name": "GPT-4 sentiment and topic classification",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        480,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "social-sentiment-monitor-4",
+      "name": "Slack alert or Airtable archive",
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 1,
+      "position": [
+        720,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "social-sentiment-monitor-5",
+      "name": "Weekly digest generation",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        960,
+        200
+      ]
+    }
+  ],
+  "connections": {
+    "Schedule or RSS trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP/RSS fetch and dedupe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP/RSS fetch and dedupe": {
+      "main": [
+        [
+          {
+            "node": "GPT-4 sentiment and topic classification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GPT-4 sentiment and topic classification": {
+      "main": [
+        [
+          {
+            "node": "Slack alert or Airtable archive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack alert or Airtable archive": {
+      "main": [
+        [
+          {
+            "node": "Weekly digest generation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "meta": {
+    "generated": true,
+    "source": "automation-portfolio"
+  },
+  "active": false
+}

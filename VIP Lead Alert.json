@@ -1,0 +1,112 @@
+{
+  "name": "VIP Lead Alert",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "vip-lead-alert-1",
+      "name": "Google Sheets trigger",
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "vip-lead-alert-2",
+      "name": "Pattern matching + enrichment",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        240,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "vip-lead-alert-3",
+      "name": "Telegram VIP alert",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [
+        480,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "vip-lead-alert-4",
+      "name": "Slack/Email fallback",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [
+        720,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "vip-lead-alert-5",
+      "name": "SLA logging in Sheets",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        960,
+        200
+      ]
+    }
+  ],
+  "connections": {
+    "Google Sheets trigger": {
+      "main": [
+        [
+          {
+            "node": "Pattern matching + enrichment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pattern matching + enrichment": {
+      "main": [
+        [
+          {
+            "node": "Telegram VIP alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram VIP alert": {
+      "main": [
+        [
+          {
+            "node": "Slack/Email fallback",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack/Email fallback": {
+      "main": [
+        [
+          {
+            "node": "SLA logging in Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "meta": {
+    "generated": true,
+    "source": "automation-portfolio"
+  },
+  "active": false
+}

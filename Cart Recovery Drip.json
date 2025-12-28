@@ -1,0 +1,112 @@
+{
+  "name": "Cart Recovery Drip",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "cart-recovery-drip-1",
+      "name": "Checkout webhook intake",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "cart-recovery-drip-2",
+      "name": "Code Node enrichment + Data Store dedupe",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        240,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "cart-recovery-drip-3",
+      "name": "Wait Node delay",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        480,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "cart-recovery-drip-4",
+      "name": "Gmail reminder and coupon logic",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 1,
+      "position": [
+        720,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "cart-recovery-drip-5",
+      "name": "Slack alert + Google Sheets logging",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 1,
+      "position": [
+        960,
+        200
+      ]
+    }
+  ],
+  "connections": {
+    "Checkout webhook intake": {
+      "main": [
+        [
+          {
+            "node": "Code Node enrichment + Data Store dedupe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Node enrichment + Data Store dedupe": {
+      "main": [
+        [
+          {
+            "node": "Wait Node delay",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait Node delay": {
+      "main": [
+        [
+          {
+            "node": "Gmail reminder and coupon logic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail reminder and coupon logic": {
+      "main": [
+        [
+          {
+            "node": "Slack alert + Google Sheets logging",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "meta": {
+    "generated": true,
+    "source": "automation-portfolio"
+  },
+  "active": false
+}

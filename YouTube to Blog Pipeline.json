@@ -1,0 +1,112 @@
+{
+  "name": "YouTube to Blog Pipeline",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "youtube-to-blog-pipeline-1",
+      "name": "YouTube new video trigger",
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "youtube-to-blog-pipeline-2",
+      "name": "Audio/caption fetch and Whisper transcription",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        240,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "youtube-to-blog-pipeline-3",
+      "name": "GPT-4 outline and copy generation",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        480,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "youtube-to-blog-pipeline-4",
+      "name": "WordPress draft creation",
+      "type": "n8n-nodes-base.wordpress",
+      "typeVersion": 1,
+      "position": [
+        720,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "youtube-to-blog-pipeline-5",
+      "name": "Slack + Notion notifications",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [
+        960,
+        200
+      ]
+    }
+  ],
+  "connections": {
+    "YouTube new video trigger": {
+      "main": [
+        [
+          {
+            "node": "Audio/caption fetch and Whisper transcription",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Audio/caption fetch and Whisper transcription": {
+      "main": [
+        [
+          {
+            "node": "GPT-4 outline and copy generation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GPT-4 outline and copy generation": {
+      "main": [
+        [
+          {
+            "node": "WordPress draft creation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WordPress draft creation": {
+      "main": [
+        [
+          {
+            "node": "Slack + Notion notifications",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "meta": {
+    "generated": true,
+    "source": "automation-portfolio"
+  },
+  "active": false
+}

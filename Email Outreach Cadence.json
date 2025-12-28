@@ -1,0 +1,112 @@
+{
+  "name": "Email Outreach Cadence",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "email-outreach-cadence-1",
+      "name": "Google Sheets roster trigger",
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "email-outreach-cadence-2",
+      "name": "Gmail send step 1",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 1,
+      "position": [
+        240,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "email-outreach-cadence-3",
+      "name": "Wait Node and reply check",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        480,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "email-outreach-cadence-4",
+      "name": "Conditional Gmail send step 2 or stop",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 1,
+      "position": [
+        720,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "email-outreach-cadence-5",
+      "name": "Google Sheets update + reporting",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 1,
+      "position": [
+        960,
+        200
+      ]
+    }
+  ],
+  "connections": {
+    "Google Sheets roster trigger": {
+      "main": [
+        [
+          {
+            "node": "Gmail send step 1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail send step 1": {
+      "main": [
+        [
+          {
+            "node": "Wait Node and reply check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait Node and reply check": {
+      "main": [
+        [
+          {
+            "node": "Conditional Gmail send step 2 or stop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Conditional Gmail send step 2 or stop": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets update + reporting",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "meta": {
+    "generated": true,
+    "source": "automation-portfolio"
+  },
+  "active": false
+}

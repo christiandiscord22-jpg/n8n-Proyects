@@ -1,0 +1,112 @@
+{
+  "name": "Technical Support Bot (Simple RAG)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "technical-support-bot-simple-rag-1",
+      "name": "Telegram Webhook Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "technical-support-bot-simple-rag-2",
+      "name": "Code Node sanitizes question payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        240,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "technical-support-bot-simple-rag-3",
+      "name": "Pinecone vector similarity search",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        480,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "technical-support-bot-simple-rag-4",
+      "name": "AI Agent Node drafts response with memory guardrails",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        720,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "technical-support-bot-simple-rag-5",
+      "name": "If/Response Node posts on Telegram and logs to Slack QA",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [
+        960,
+        200
+      ]
+    }
+  ],
+  "connections": {
+    "Telegram Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Code Node sanitizes question payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Node sanitizes question payload": {
+      "main": [
+        [
+          {
+            "node": "Pinecone vector similarity search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pinecone vector similarity search": {
+      "main": [
+        [
+          {
+            "node": "AI Agent Node drafts response with memory guardrails",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent Node drafts response with memory guardrails": {
+      "main": [
+        [
+          {
+            "node": "If/Response Node posts on Telegram and logs to Slack QA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "meta": {
+    "generated": true,
+    "source": "automation-portfolio"
+  },
+  "active": false
+}

@@ -1,0 +1,112 @@
+{
+  "name": "GPT Lead Scoring Engine",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "gpt-lead-scoring-engine-1",
+      "name": "Web form submission",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "gpt-lead-scoring-engine-2",
+      "name": "Code Node normalization",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        240,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "gpt-lead-scoring-engine-3",
+      "name": "GPT-4 scoring and reasoning",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        480,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "gpt-lead-scoring-engine-4",
+      "name": "Google Sheets append",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 1,
+      "position": [
+        720,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "gpt-lead-scoring-engine-5",
+      "name": "Slack notification for high scores",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [
+        960,
+        200
+      ]
+    }
+  ],
+  "connections": {
+    "Web form submission": {
+      "main": [
+        [
+          {
+            "node": "Code Node normalization",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Node normalization": {
+      "main": [
+        [
+          {
+            "node": "GPT-4 scoring and reasoning",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GPT-4 scoring and reasoning": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets append",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets append": {
+      "main": [
+        [
+          {
+            "node": "Slack notification for high scores",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "meta": {
+    "generated": true,
+    "source": "automation-portfolio"
+  },
+  "active": false
+}

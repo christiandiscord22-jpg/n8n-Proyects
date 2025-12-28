@@ -1,0 +1,112 @@
+{
+  "name": "Sheets \u00e2\u2020\u201d Trello Synchronizer",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "sheets-trello-synchronizer-1",
+      "name": "Google Sheets row trigger",
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "sheets-trello-synchronizer-2",
+      "name": "Code Node normalization + Data Store dedupe",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        240,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "sheets-trello-synchronizer-3",
+      "name": "Trello card create/update",
+      "type": "n8n-nodes-base.trello",
+      "typeVersion": 1,
+      "position": [
+        480,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "sheets-trello-synchronizer-4",
+      "name": "Google Sheets writeback with Trello URL",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 1,
+      "position": [
+        720,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "sheets-trello-synchronizer-5",
+      "name": "Nightly Trello-to-Sheets status sync",
+      "type": "n8n-nodes-base.trello",
+      "typeVersion": 1,
+      "position": [
+        960,
+        200
+      ]
+    }
+  ],
+  "connections": {
+    "Google Sheets row trigger": {
+      "main": [
+        [
+          {
+            "node": "Code Node normalization + Data Store dedupe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Node normalization + Data Store dedupe": {
+      "main": [
+        [
+          {
+            "node": "Trello card create/update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Trello card create/update": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets writeback with Trello URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets writeback with Trello URL": {
+      "main": [
+        [
+          {
+            "node": "Nightly Trello-to-Sheets status sync",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "meta": {
+    "generated": true,
+    "source": "automation-portfolio"
+  },
+  "active": false
+}

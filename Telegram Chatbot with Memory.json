@@ -1,0 +1,112 @@
+{
+  "name": "Telegram Chatbot with Memory",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "telegram-chatbot-with-memory-1",
+      "name": "Telegram Webhook intake",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "telegram-chatbot-with-memory-2",
+      "name": "Code Node guardrail and sanitation",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        240,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "telegram-chatbot-with-memory-3",
+      "name": "AI Agent Node with window memory",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        480,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "telegram-chatbot-with-memory-4",
+      "name": "Redis logging + Data Store dedupe",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        720,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "telegram-chatbot-with-memory-5",
+      "name": "Conditional response or human escalation via Slack",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [
+        960,
+        200
+      ]
+    }
+  ],
+  "connections": {
+    "Telegram Webhook intake": {
+      "main": [
+        [
+          {
+            "node": "Code Node guardrail and sanitation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Node guardrail and sanitation": {
+      "main": [
+        [
+          {
+            "node": "AI Agent Node with window memory",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent Node with window memory": {
+      "main": [
+        [
+          {
+            "node": "Redis logging + Data Store dedupe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis logging + Data Store dedupe": {
+      "main": [
+        [
+          {
+            "node": "Conditional response or human escalation via Slack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "meta": {
+    "generated": true,
+    "source": "automation-portfolio"
+  },
+  "active": false
+}

@@ -1,0 +1,112 @@
+{
+  "name": "Telegram Expense Reporter",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "telegram-expense-reporter-1",
+      "name": "Telegram bot upload",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "telegram-expense-reporter-2",
+      "name": "Binary storage + metadata",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        240,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "telegram-expense-reporter-3",
+      "name": "OpenAI Vision extraction",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        480,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "telegram-expense-reporter-4",
+      "name": "Code Node categorization",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        720,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "telegram-expense-reporter-5",
+      "name": "Google Sheets entry + Slack confirmation",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 1,
+      "position": [
+        960,
+        200
+      ]
+    }
+  ],
+  "connections": {
+    "Telegram bot upload": {
+      "main": [
+        [
+          {
+            "node": "Binary storage + metadata",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Binary storage + metadata": {
+      "main": [
+        [
+          {
+            "node": "OpenAI Vision extraction",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Vision extraction": {
+      "main": [
+        [
+          {
+            "node": "Code Node categorization",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Node categorization": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets entry + Slack confirmation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "meta": {
+    "generated": true,
+    "source": "automation-portfolio"
+  },
+  "active": false
+}

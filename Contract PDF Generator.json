@@ -1,0 +1,112 @@
+{
+  "name": "Contract PDF Generator",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "contract-pdf-generator-1",
+      "name": "Webhook/form submission",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "contract-pdf-generator-2",
+      "name": "Code Node template merge",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        240,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "contract-pdf-generator-3",
+      "name": "HTML-to-PDF conversion",
+      "type": "n8n-nodes-base.pdf",
+      "typeVersion": 1,
+      "position": [
+        480,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "contract-pdf-generator-4",
+      "name": "Google Drive storage",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 1,
+      "position": [
+        720,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "contract-pdf-generator-5",
+      "name": "Gmail send + Airtable log",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 1,
+      "position": [
+        960,
+        200
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook/form submission": {
+      "main": [
+        [
+          {
+            "node": "Code Node template merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Node template merge": {
+      "main": [
+        [
+          {
+            "node": "HTML-to-PDF conversion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML-to-PDF conversion": {
+      "main": [
+        [
+          {
+            "node": "Google Drive storage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive storage": {
+      "main": [
+        [
+          {
+            "node": "Gmail send + Airtable log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "meta": {
+    "generated": true,
+    "source": "automation-portfolio"
+  },
+  "active": false
+}

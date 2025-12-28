@@ -1,0 +1,112 @@
+{
+  "name": "Commission Calculator",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "commission-calculator-1",
+      "name": "Google Sheets deal data read",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "commission-calculator-2",
+      "name": "Code Node commission calculation",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        240,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "commission-calculator-3",
+      "name": "PDF template merge",
+      "type": "n8n-nodes-base.pdf",
+      "typeVersion": 1,
+      "position": [
+        480,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "commission-calculator-4",
+      "name": "Gmail distribution",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 1,
+      "position": [
+        720,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "commission-calculator-5",
+      "name": "Drive archive + Slack notification",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [
+        960,
+        200
+      ]
+    }
+  ],
+  "connections": {
+    "Google Sheets deal data read": {
+      "main": [
+        [
+          {
+            "node": "Code Node commission calculation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Node commission calculation": {
+      "main": [
+        [
+          {
+            "node": "PDF template merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PDF template merge": {
+      "main": [
+        [
+          {
+            "node": "Gmail distribution",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail distribution": {
+      "main": [
+        [
+          {
+            "node": "Drive archive + Slack notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "meta": {
+    "generated": true,
+    "source": "automation-portfolio"
+  },
+  "active": false
+}

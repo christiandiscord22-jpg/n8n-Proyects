@@ -1,0 +1,112 @@
+{
+  "name": "Newsletter Curator",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "newsletter-curator-1",
+      "name": "Scheduled RSS aggregation",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "newsletter-curator-2",
+      "name": "Code Node dedupe",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        240,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "newsletter-curator-3",
+      "name": "GPT-4 ranking and summary",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        480,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "newsletter-curator-4",
+      "name": "Gmail draft assembly",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 1,
+      "position": [
+        720,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "newsletter-curator-5",
+      "name": "Approval route + Sheets logging",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        960,
+        200
+      ]
+    }
+  ],
+  "connections": {
+    "Scheduled RSS aggregation": {
+      "main": [
+        [
+          {
+            "node": "Code Node dedupe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Node dedupe": {
+      "main": [
+        [
+          {
+            "node": "GPT-4 ranking and summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GPT-4 ranking and summary": {
+      "main": [
+        [
+          {
+            "node": "Gmail draft assembly",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail draft assembly": {
+      "main": [
+        [
+          {
+            "node": "Approval route + Sheets logging",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "meta": {
+    "generated": true,
+    "source": "automation-portfolio"
+  },
+  "active": false
+}

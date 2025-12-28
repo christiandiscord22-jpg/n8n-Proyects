@@ -1,0 +1,112 @@
+{
+  "name": "Renewal Reminder Engine",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "renewal-reminder-engine-1",
+      "name": "Daily schedule trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "renewal-reminder-engine-2",
+      "name": "Google Sheets filter for 30-day window",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 1,
+      "position": [
+        240,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "renewal-reminder-engine-3",
+      "name": "Todoist/Trello task creation",
+      "type": "n8n-nodes-base.trello",
+      "typeVersion": 1,
+      "position": [
+        480,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "renewal-reminder-engine-4",
+      "name": "Gmail reminder send",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 1,
+      "position": [
+        720,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "renewal-reminder-engine-5",
+      "name": "Google Sheets status update",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 1,
+      "position": [
+        960,
+        200
+      ]
+    }
+  ],
+  "connections": {
+    "Daily schedule trigger": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets filter for 30-day window",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets filter for 30-day window": {
+      "main": [
+        [
+          {
+            "node": "Todoist/Trello task creation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Todoist/Trello task creation": {
+      "main": [
+        [
+          {
+            "node": "Gmail reminder send",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail reminder send": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets status update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "meta": {
+    "generated": true,
+    "source": "automation-portfolio"
+  },
+  "active": false
+}

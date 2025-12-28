@@ -1,0 +1,112 @@
+{
+  "name": "Meeting Summarizer",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "meeting-summarizer-1",
+      "name": "n8n Schedule trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "meeting-summarizer-2",
+      "name": "Google Drive binary fetch",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 1,
+      "position": [
+        240,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "meeting-summarizer-3",
+      "name": "OpenAI Whisper transcription",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        480,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "meeting-summarizer-4",
+      "name": "Code Node to extract tasks and feed GPT-4",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        720,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "meeting-summarizer-5",
+      "name": "Gmail HTML summary and Airtable log",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 1,
+      "position": [
+        960,
+        200
+      ]
+    }
+  ],
+  "connections": {
+    "n8n Schedule trigger": {
+      "main": [
+        [
+          {
+            "node": "Google Drive binary fetch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive binary fetch": {
+      "main": [
+        [
+          {
+            "node": "OpenAI Whisper transcription",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Whisper transcription": {
+      "main": [
+        [
+          {
+            "node": "Code Node to extract tasks and feed GPT-4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Node to extract tasks and feed GPT-4": {
+      "main": [
+        [
+          {
+            "node": "Gmail HTML summary and Airtable log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "meta": {
+    "generated": true,
+    "source": "automation-portfolio"
+  },
+  "active": false
+}

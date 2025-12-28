@@ -1,0 +1,112 @@
+{
+  "name": "Cold Email Personalizer",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "cold-email-personalizer-1",
+      "name": "Google Sheets trigger",
+      "type": "n8n-nodes-base.googleSheetsTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "cold-email-personalizer-2",
+      "name": "HTTP Request website fetch",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        240,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "cold-email-personalizer-3",
+      "name": "Code Node cleans HTML",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        480,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "cold-email-personalizer-4",
+      "name": "GPT-4 personalization generator",
+      "type": "n8n-nodes-base.openAi",
+      "typeVersion": 1,
+      "position": [
+        720,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "cold-email-personalizer-5",
+      "name": "Google Sheets update + Slack QA ping",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 1,
+      "position": [
+        960,
+        200
+      ]
+    }
+  ],
+  "connections": {
+    "Google Sheets trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request website fetch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request website fetch": {
+      "main": [
+        [
+          {
+            "node": "Code Node cleans HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Node cleans HTML": {
+      "main": [
+        [
+          {
+            "node": "GPT-4 personalization generator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GPT-4 personalization generator": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets update + Slack QA ping",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "meta": {
+    "generated": true,
+    "source": "automation-portfolio"
+  },
+  "active": false
+}

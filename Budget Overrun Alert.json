@@ -1,0 +1,112 @@
+{
+  "name": "Budget Overrun Alert",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "budget-overrun-alert-1",
+      "name": "Weekly schedule trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "budget-overrun-alert-2",
+      "name": "Toggl/Clockify API fetch",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        240,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "budget-overrun-alert-3",
+      "name": "Code Node aggregation vs. budget",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        480,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "budget-overrun-alert-4",
+      "name": "Gmail/Slack alerting",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 1,
+      "position": [
+        720,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "budget-overrun-alert-5",
+      "name": "Google Sheets trend logging",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 1,
+      "position": [
+        960,
+        200
+      ]
+    }
+  ],
+  "connections": {
+    "Weekly schedule trigger": {
+      "main": [
+        [
+          {
+            "node": "Toggl/Clockify API fetch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Toggl/Clockify API fetch": {
+      "main": [
+        [
+          {
+            "node": "Code Node aggregation vs. budget",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Node aggregation vs. budget": {
+      "main": [
+        [
+          {
+            "node": "Gmail/Slack alerting",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail/Slack alerting": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets trend logging",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "meta": {
+    "generated": true,
+    "source": "automation-portfolio"
+  },
+  "active": false
+}

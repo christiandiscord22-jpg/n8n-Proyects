@@ -1,0 +1,112 @@
+{
+  "name": "Lead Enrichment Relay",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "lead-enrichment-relay-1",
+      "name": "Typeform webhook intake",
+      "type": "n8n-nodes-base.typeformTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "lead-enrichment-relay-2",
+      "name": "Code Node parsing and normalization",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        240,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "lead-enrichment-relay-3",
+      "name": "Clearbit API enrichment plus fallback HTTP",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        480,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "lead-enrichment-relay-4",
+      "name": "Google Sheets update with enrichment details",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 1,
+      "position": [
+        720,
+        200
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "lead-enrichment-relay-5",
+      "name": "Slack notification for high-fit thresholds",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 1,
+      "position": [
+        960,
+        200
+      ]
+    }
+  ],
+  "connections": {
+    "Typeform webhook intake": {
+      "main": [
+        [
+          {
+            "node": "Code Node parsing and normalization",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Node parsing and normalization": {
+      "main": [
+        [
+          {
+            "node": "Clearbit API enrichment plus fallback HTTP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clearbit API enrichment plus fallback HTTP": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets update with enrichment details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets update with enrichment details": {
+      "main": [
+        [
+          {
+            "node": "Slack notification for high-fit thresholds",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {},
+  "meta": {
+    "generated": true,
+    "source": "automation-portfolio"
+  },
+  "active": false
+}
